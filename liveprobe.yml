@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: liveness-demo   # Name of the deployment
+
+spec:
+  replicas: 1           # Number of pods to run
+  selector:
+    matchLabels:
+      app: liveness-demo
+
+  template:
+    metadata:
+      labels:
+        app: liveness-demo
+
+    spec:
+      containers:
+      - name: python-app
+        image: parikshit1212/livenessprobe 
+        # Replace above with your own image
+
+        ports:
+        - containerPort: 5000  # App runs on port 5000
+
+        # ---------------- LIVENESS PROBE START ----------------
+        livenessProbe:
+
+          httpGet:
+            path: /health      # Kubernetes will hit this endpoint
+            port: 5000         # On container's port 5000
+
+          initialDelaySeconds: 5
+          # Wait 5 seconds before starting the first probe
+          # Allows the container time to start the app
+
+          periodSeconds: 5
+          # Probe runs every 5 seconds
+
+          timeoutSeconds: 2
+          # Kubelet will wait max 2 seconds for a response
+
+          failureThreshold: 1
+          # If 1 failure occurs, restart the container immediately
+
+        # ---------------- LIVENESS PROBE END ----------------
+
