@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readiness-demo
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readiness-demo
+
+  template:
+    metadata:
+      labels:
+        app: readiness-demo
+
+    spec:
+      containers:
+      - name: python-app
+        image: parikshit1212/readiness
+        ports:
+        - containerPort: 5000
+
+        # --------------- READINESS PROBE START ----------------
+        readinessProbe:
+          httpGet:
+            path: /ready     # Endpoint checked by Kubernetes
+            port: 5000
+
+          initialDelaySeconds: 5
+          # Wait 5 seconds before first readiness check
+
+          periodSeconds: 5
+          # Check readiness every 5 seconds
+
+          timeoutSeconds: 2
+          # Wait max 2 seconds for response
+
+          failureThreshold: 1
+          # 1 failure → Pod marked NOT READY immediately
+        # --------------- READINESS PROBE END ----------------
+
