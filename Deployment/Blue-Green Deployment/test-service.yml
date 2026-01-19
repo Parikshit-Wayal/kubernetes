@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: green-test-service            # Service for GREEN testing
+  namespace: bg-deployment
+
+spec:
+  type: NodePort
+  selector:                           # GREEN version only
+    app: expressapp
+    version: green
+  ports:
+    - protocol: TCP
+      port: 80                        # Cluster internal port
+      targetPort: 3000                # Matches GREEN container port
+      nodePort: 30081                 # NodePort for Testing version
+

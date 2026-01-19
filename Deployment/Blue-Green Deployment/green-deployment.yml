@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expressapp-green              # Green deployment name
+  namespace: bg-deployment
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: expressapp
+      version: green                  # GREEN version selector
+
+  template:
+    metadata:
+      labels:
+        app: expressapp
+        version: green
+    spec:
+      containers:
+        - name: online-shop           # Container name for green version
+          image: amitabhdevops/online_shop:latest  # NEW updated image
+          ports:
+            - containerPort: 3000     # GREEN app internal port
+

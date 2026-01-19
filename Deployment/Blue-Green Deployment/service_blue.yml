@@ -1,0 +1,17 @@
+apiVersion: v1                        # API group for Kubernetes core objects
+kind: Service                         # We are creating a Service
+metadata:
+  name: expressapp-service            # Name of the service
+  namespace: bg-deployment            # Namespace where service will run
+
+spec:
+  type: NodePort                      # Service accessible on a port of the Node
+  selector:                           # Selects pods having these labels
+    app: expressapp                   # Must match Deployment labels
+    version: blue                     # Ensures BLUE version is Live
+  ports:
+    - protocol: TCP                   # Service uses TCP protocol
+      port: 80                        # Service port inside cluster (ClusterIP port)
+      targetPort: 3006                # Container port inside the Pod (matches Blue pod)
+      nodePort: 30080                 # Port exposed on EC2 (NODE)
+

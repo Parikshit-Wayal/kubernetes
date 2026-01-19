@@ -1,0 +1,25 @@
+apiVersion: apps/v1                   # API version for Deployments
+kind: Deployment                      # Creating a deployment
+metadata:
+  name: expressapp-blue               # Name of deployment
+  namespace: bg-deployment            # Must match service namespace
+
+spec:
+  replicas: 2                         # Number of Pods to run
+  selector:
+    matchLabels:                      # Select Pods having these labels
+      app: expressapp
+      version: blue                   # Ensures only BLUE pods selected
+
+  template:                           # Pod template inside Deployment
+    metadata:
+      labels:                         # These labels MUST match selector
+        app: expressapp
+        version: blue
+    spec:
+      containers:
+        - name: expressapp            # Container name
+          image: parikshit1212/expressapp:latest   # Your BLUE image
+          ports:
+            - containerPort: 3006     # Port your app listens inside container
+
